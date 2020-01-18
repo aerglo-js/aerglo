@@ -1,0 +1,39 @@
+{
+	"name": "aerglo",
+	"version": "0.0.1",
+	"description": "Static Site generator for the JAM Stack",
+	"main": "dist/index.js",
+	"directories": {
+		"test": "test"
+	},
+	"scripts": {
+		"test": "jest"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/aerglo-js/aerglo.git"
+	},
+	"keywords": [
+		"ssg",
+		"JAM stack",
+		"alpine",
+		"tailwind",
+		"static",
+		"netlify",
+		"zeit",
+		"now",
+		"lambda",
+		"serverless",
+		"cloud functions",
+		"functions",
+		"html",
+		"css",
+		"javascript"
+	],
+	"author": "Zane C. Milakovic <zane.milakovic@icloud.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/aerglo-js/aerglo/issues"
+	},
+	"homepage": "https://github.com/aerglo-js/aerglo#readme"
+}

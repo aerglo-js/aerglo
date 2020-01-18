@@ -1,0 +1,7 @@
+{
+	"name": "Aerglo Serverless Static Website Generator",
+	"version": 2,
+	"alias": ["aerglo.dev"],
+	"cleanUrls": true,
+	"trailingSlash": false
+}
