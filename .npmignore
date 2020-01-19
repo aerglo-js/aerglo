@@ -1,0 +1,6 @@
+jest.config.json
+test/
+www/
+.github/
+.editorconfig
+now.json
