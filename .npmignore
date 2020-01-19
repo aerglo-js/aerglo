@@ -4,3 +4,4 @@ www/
 .github/
 .editorconfig
 now.json
+.DS_Store
