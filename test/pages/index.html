@@ -1,1 +1,33 @@
+<script context="module">
+	let userName;
+</script>
 
+<script>
+	import Nested from './Nested.svelte';
+
+	let user = { loggedIn: false };
+
+	function toggle() {
+		user.loggedIn = !user.loggedIn;
+	}
+</script>
+
+<style>
+	button {
+		color: purple;
+		font-family: 'Comic Sans MS', cursive;
+		font-size: 2em;
+	}
+</style>
+
+{#if user.loggedIn}
+<button on:click="{toggle}">
+	Log out {userName}
+</button>
+{:else}
+<button on:click="{toggle}">
+	Log in {userName}
+</button>
+{/if}
+
+<Nested />
