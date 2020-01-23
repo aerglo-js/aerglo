@@ -13,6 +13,13 @@ program
 
 program.parse(process.argv);
 
+const wrapInNodeFragment = (nodes: DefaultTreeNode[]) => {
+  return {
+    nodeName: '#document',
+    childNodes: nodes,
+  };
+}
+
 const test = async () => {
   try {
     const file = await fs.readFile(join(process.cwd(), 'pages/index.html'), 'utf-8');
@@ -40,16 +47,28 @@ const test = async () => {
       }
     });
 
-    console.log('HTML - ', html);
-    console.log('CSS - ', css);
-    console.log('INSTANCE - ', instance);
-    console.log('module - ', module);
 
-    ast.childNodes = html;
+    // Need to change from Instance and Module, to Client and Build?
+    // Marks a change from Svelte syntax, but they do different things
+    // Client would be exposed on the client itself
+    // It could support <script lang="typescript"></script>
+    // Which would allow it to be preprocessed
+    // And the output would then be bundled somehow on the client
+    // Where <script context="build"></script> would signify that
+    // it only ran on the lambda, or the CI environment
+    console.log('HTML (ast) - ', html);
+    console.log('CSS (ast) - ', css);
+    console.log('INSTANCE (ast) - ', instance);
+    console.log('MODULE (ast)- ', module);
 
-    const str = serialize(ast);
+    // ast.childNodes = html;
 
-    console.log('OUTPUT - ', str);
+    // const str = serialize(ast);
+
+    console.log('HTML (serialized) - ', serialize(wrapInNodeFragment(html)));
+    console.log('CSS (serialized) - ', serialize(wrapInNodeFragment(css)));
+    console.log('INSTANCE (serialized) - ', serialize(wrapInNodeFragment(instance)));
+    console.log('MODULE (serialized) - ', serialize(wrapInNodeFragment(module)));
 
   } catch (e) {
     console.log('ERROR - ', e);
