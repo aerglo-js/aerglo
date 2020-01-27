@@ -43,8 +43,10 @@
 	},
 	"homepage": "https://github.com/aerglo-js/aerglo#readme",
 	"devDependencies": {
+		"@types/chalk": "2.2.0",
 		"@types/jest": "24.9.0",
 		"@types/node": "13.1.8",
+		"@types/prettyjson": "0.0.29",
 		"jest": "24.9.0",
 		"ts-jest": "24.3.0",
 		"typescript": "3.7.5"
@@ -52,7 +54,10 @@
 	"dependencies": {
 		"@types/parse5": "5.0.2",
 		"acorn": "7.1.0",
+		"chalk": "3.0.0",
 		"commander": "4.1.0",
-		"parse5": "5.1.1"
+		"figures": "3.1.0",
+		"parse5": "5.1.1",
+		"prettyjson": "1.2.1"
 	}
 }
