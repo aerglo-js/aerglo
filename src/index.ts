@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-
-import { promisify } from 'util';
 import program from 'commander';
 import parser from './parser';
 import { setLoggingLevel, log, file } from './utils';
