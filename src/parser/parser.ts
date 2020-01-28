@@ -1,24 +1,70 @@
 import { serialize, parseFragment, DefaultTreeDocumentFragment, DefaultTreeElement, DefaultTreeNode } from 'parse5';
 import { log } from '../utils';
 import wrapInNodeFragment from './wrapInNodeFragment';
+import normalizeLanguageAttribute from './normalizeLanguageAttribute'
 
-const parser = async (document: string) => {
-  const ast = parseFragment(document) as DefaultTreeDocumentFragment;
+enum ScriptType {
+  Build = "BuildNode",
+  Client = "ClientNode",
+}
+
+interface ScriptRootNode {
+  type: ScriptType;
+  language?: string;
+  children: DefaultTreeNode[];
+}
+
+const parser = (document: string) => {
+  const ast = parseFragment(document.replace(/\r?\n/g, '')) as DefaultTreeDocumentFragment;
 
   // TODO - Build Better Interface
   const css: DefaultTreeNode[] = [];
-  const instance: DefaultTreeNode[] = [];
-  const module: DefaultTreeNode[] = [];
 
+  const client: ScriptRootNode = {
+    type: ScriptType.Client,
+    children: []
+  };
+
+  const build: ScriptRootNode = {
+    type: ScriptType.Build,
+    children: []
+  };
+
+  // Split out HTML, Script (build), Script (client), CSS blocks
   const html: DefaultTreeNode[] = ast.childNodes.filter((node) => {
     switch (node.nodeName) {
       case 'script':
-        if ((node as DefaultTreeElement).attrs.find(({ name }) => name === "context")?.value === "module") {
-          module.push(node);
+
+        // Determine the context of the <script> tag within the file
+        const context = (node as DefaultTreeElement).attrs.find(
+          ({ name }) => name === "context"
+        )?.value;
+
+        // Identify the language attribute, and normalize it to a valid value, or false
+        const language = normalizeLanguageAttribute(
+          (node as DefaultTreeElement).attrs.find(
+            ({ name }) => name === "language" || name === "lang"
+          )?.value
+        );
+
+        // Build code has to be <script context="build"></script>
+        // this ensure what the intent is, and allows for additional validations
+        if (context === 'build') {
+          if (language) build.language = language;
+          build.children.push(node);
+
+          // Client is either <script></script> or <script context="client"></script>
+          // this code wont be modified, except maybe preprocessing with typescript or babel
+        } else if (context === 'client' || context === undefined) {
+          if (language) build.language = language;
+          client.children.push(node);
+
+          // Incorrect context
         } else {
-          instance.push(node);
+          log.error('The context attribute should be "build" if it is supplied');
         }
         return false;
+
       case 'style':
         css.push(node);
         return false;
@@ -30,6 +76,7 @@ const parser = async (document: string) => {
 
   // Thoughts -
 
+  // 0. Disallow langauge on <script context="build"></script>
   // 1. Parser should return Acron parse of <script context="build"></script>, if presnt
   // 2. Find AST parser for Styles, should be the same as Svelte if possible
   // 3. Parser should return "???" parse of <style></style>, if present
@@ -64,13 +111,13 @@ const parser = async (document: string) => {
 
   console.log('HTML (ast) - ', html);
   console.log('CSS (ast) - ', css);
-  console.log('INSTANCE (ast) - ', instance);
-  console.log('MODULE (ast)- ', module);
+  console.log('CLIENT (ast) - ', client.children);
+  console.log('BUILD (ast)- ', build.children);
 
   console.log('HTML (serialized) - ', serialize(wrapInNodeFragment(html)));
   console.log('CSS (serialized) - ', serialize(wrapInNodeFragment(css)));
-  console.log('INSTANCE (serialized) - ', serialize(wrapInNodeFragment(instance)));
-  console.log('MODULE (serialized) - ', serialize(wrapInNodeFragment(module)));
+  console.log('CLIENT (serialized) - ', serialize(wrapInNodeFragment(client.children)));
+  console.log('BUILD (serialized) - ', serialize(wrapInNodeFragment(build.children)));
 
   log.stage('Testing Exit Error');
   log.status('First Stage')

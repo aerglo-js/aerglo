@@ -10,21 +10,17 @@ program
 
 program.parse(process.argv);
 
+// Sets logging level
 const level = parseInt(program.log, 10);
-
-console.log("DEFAULT LOGGING LEVEL - ", program.log);
-
 if (!program.log || level < 1 || level > 3) {
   log.error('Logging level must be 1, 2, or 3');
 } else {
-  setLoggingLevel(parseInt(program.log, 10));
+  setLoggingLevel(level);
 }
 
+// Process a single file
 if (program.file) {
   const document = file.open(program.file);
   if (typeof document === 'string') parser(document);
 }
-
-if (program.bar) console.log('bar');
-if (program.baz) console.log('baz');
 
