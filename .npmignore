@@ -5,3 +5,4 @@ www/
 .editorconfig
 now.json
 .DS_Store
+tsconfig.def
