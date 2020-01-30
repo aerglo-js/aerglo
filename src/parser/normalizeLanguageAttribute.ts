@@ -1,10 +1,14 @@
+import { log } from "../utils";
+import { ScriptLanguage } from "./types";
+
 // Normalizes the logic for the langauge attribute, to ensure valid value
-const normalizeLanguageAttribute = (lang: string | undefined) => {
+const normalizeLanguageAttribute = (lang: string | undefined): ScriptLanguage | boolean => {
   if (lang === 'typescript' || lang === 'ts') {
-    return 'typescript';
+    return ScriptLanguage.Typescript;
   } else if (lang === 'babel') {
-    return 'babel';
+    return ScriptLanguage.Babel;
   } else {
+    log.warning(`Unknown language '${lang}' provided to script tag.`)
     return false;
   }
 };

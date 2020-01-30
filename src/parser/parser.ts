@@ -2,31 +2,20 @@ import { serialize, parseFragment, DefaultTreeDocumentFragment, DefaultTreeEleme
 import { log } from '../utils';
 import wrapInNodeFragment from './wrapInNodeFragment';
 import normalizeLanguageAttribute from './normalizeLanguageAttribute'
+import { ClientScriptRootNode, BuildScriptRootNode } from './types';
 
-enum ScriptType {
-  Build = "BuildNode",
-  Client = "ClientNode",
-}
-
-interface ScriptRootNode {
-  type: ScriptType;
-  language?: string;
-  children: DefaultTreeNode[];
-}
-
+import { types } from 'util';
 const parser = (document: string) => {
   const ast = parseFragment(document.replace(/\r?\n/g, '')) as DefaultTreeDocumentFragment;
 
   // TODO - Build Better Interface
   const css: DefaultTreeNode[] = [];
 
-  const client: ScriptRootNode = {
-    type: ScriptType.Client,
+  const client: ClientScriptRootNode = {
     children: []
   };
 
-  const build: ScriptRootNode = {
-    type: ScriptType.Build,
+  const build: BuildScriptRootNode = {
     children: []
   };
 
@@ -50,18 +39,18 @@ const parser = (document: string) => {
         // Build code has to be <script context="build"></script>
         // this ensure what the intent is, and allows for additional validations
         if (context === 'build') {
-          if (language) build.language = language;
+          if (language) log.warning(`The language attribute is disallowed on "build" script tags.`)
           build.children.push(node);
 
           // Client is either <script></script> or <script context="client"></script>
           // this code wont be modified, except maybe preprocessing with typescript or babel
         } else if (context === 'client' || context === undefined) {
-          if (language) build.language = language;
+          if (language) client.language = language;
           client.children.push(node);
 
           // Incorrect context
         } else {
-          log.error('The context attribute should be "build" if it is supplied');
+          log.error('The context attribute should be "build" or "client" if it is supplied');
         }
         return false;
 
@@ -76,13 +65,11 @@ const parser = (document: string) => {
 
   // Thoughts -
 
-  // 0. Disallow langauge on <script context="build"></script>
+
   // 1. Parser should return Acron parse of <script context="build"></script>, if presnt
   // 2. Find AST parser for Styles, should be the same as Svelte if possible
   // 3. Parser should return "???" parse of <style></style>, if present
-  // 4. Record lang or language attribute for <script context="client"></script>, if present
-  //    a. typescript
-  //    b. babel
+
   // 5. Loop through Parse5 output and identify conditionals, and other Svelte defines
   //    a. Should replace '#text' nodes that are conditionals to new types
   //    b. Identify other '#text' nodes that Svelte defines that we need as well
@@ -90,15 +77,6 @@ const parser = (document: string) => {
   //    a. saas
   //    b. less
   //    c. stylus
-  // 7. Change "module" and "instance" to "client" and "build" scripts
-  //    NOTE - Need to change from Instance and Module, to Client and Build?
-  //    Marks a change from Svelte syntax, but they do different things
-  //    Client would be exposed on the client itself
-  //    It could support <script lang="typescript"></script>
-  //    Which would allow it to be preprocessed
-  //    And the output would then be bundled somehow on the client
-  //    Where <script context="build"></script> would signify that
-  //    it only ran on the lambda, or the CI environment
   // 8. Split out CLI commands better
   // 9. Make parser about processing a single file, compiler would handle the actual includes, props, etc
   // 10. Need to break out mechanism to loop over set of files
@@ -108,6 +86,7 @@ const parser = (document: string) => {
   //     a. Variable replacement "{variable}"
   //     b. JS Expression "{variable * 2}"
   //     c. Are there any props outside of passed in ones that are valid?
+  //     d. What does this look like in Svelte parser? The compiler needs to have this figured out first.
 
   console.log('HTML (ast) - ', html);
   console.log('CSS (ast) - ', css);
