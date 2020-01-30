@@ -3,6 +3,9 @@ import program from 'commander';
 import parser from './parser';
 import { setLoggingLevel, log, file } from './utils';
 
+// TODO: Handle no params passed to program
+// TODO: validate we want to use commander, may have better support with a different module
+
 program
 	.version('0.0.1')
 	.option('-f, --file <file>', 'Process an individual page file')
@@ -23,6 +26,12 @@ const invalidParams = (): number => {
 	// Validates program.log (1-3)
 	if (!program.log || level < 1 || level > 3) {
 		log.error('Logging level must be 1, 2, or 3');
+		errors++;
+	}
+
+	// Validate file length
+	if (!program.file) {
+		log.error('Incorrect file path');
 		errors++;
 	}
 
