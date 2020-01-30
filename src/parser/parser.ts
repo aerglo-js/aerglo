@@ -1,10 +1,11 @@
 import {
 	serialize,
-	parseFragment,
+	parseFragment as HTMLParser,
 	DefaultTreeDocumentFragment,
 	DefaultTreeElement,
 	DefaultTreeNode,
 } from 'parse5';
+import { parse as BuildScriptParser } from 'acorn';
 import { log } from '../utils';
 import wrapInNodeFragment from './wrapInNodeFragment';
 import { normalizeScript } from './languageAttributes';
@@ -12,7 +13,7 @@ import { ClientScriptRootNode, BuildScriptRootNode } from '../types/parser';
 
 import { types } from 'util';
 const parser = (document: string) => {
-	const ast = parseFragment(
+	const ast = HTMLParser(
 		document.replace(/\r?\n/g, '')
 	) as DefaultTreeDocumentFragment;
 
@@ -50,6 +51,13 @@ const parser = (document: string) => {
 						log.warning(
 							`The language attribute is disallowed on "build" script tags.`
 						);
+					console.log(
+						'TESTING TESTING TESTING __ ',
+						serialize(wrapInNodeFragment([node])).replace(
+							/(<script(.*)>)|(<\/script>)/gm,
+							''
+						)
+					);
 					build.children.push(node);
 
 					// Client is either <script></script> or <script context="client"></script>
@@ -76,7 +84,7 @@ const parser = (document: string) => {
 
 	// Thoughts -
 
-	// 1. Parser should return Acron parse of <script context="build"></script>, if presnt
+	// 1. Parser should return Acron parse of <script context="build"></script>, if present
 	// 2. Find AST parser for Styles, should be the same as Svelte if possible
 	// 3. Parser should return "???" parse of <style></style>, if present
 
