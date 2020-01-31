@@ -1,5 +1,6 @@
 import { DefaultTreeNode } from 'parse5';
 import { Node } from 'acorn';
+import { Root } from 'postcss';
 
 export enum ScriptLanguage {
   Typescript = "typescript",
@@ -13,7 +14,7 @@ export enum StyleLanguage {
 }
 
 export interface BuildScriptRootNode {
-  body?: Node;
+  children?: Node;
 }
 
 export interface ClientScriptRootNode {
@@ -23,7 +24,7 @@ export interface ClientScriptRootNode {
 
 export interface StyleRootNode {
   language?: StyleLanguage;
-  children: DefaultTreeNode[];
+  children?: Root;
 }
 
 export interface HTMLRootNode {

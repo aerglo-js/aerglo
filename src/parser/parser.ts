@@ -1,16 +1,14 @@
 import {
-	serialize,
 	parseFragment as HTMLParser,
 	DefaultTreeDocumentFragment,
 	DefaultTreeElement,
 	DefaultTreeNode,
 } from 'parse5';
-import { parse as BuildScriptParser } from 'acorn';
 import { log } from '../utils';
-import wrapInNodeFragment from './wrapInNodeFragment';
 import { normalizeScript } from './languageAttributes';
 import convertToAcorn from './convertToAcorn';
-import { ClientScriptRootNode, BuildScriptRootNode } from '../types/parser';
+import convertToPostCss from './convertToPostCss';
+import { ClientScriptRootNode, BuildScriptRootNode, StyleRootNode } from '../types/parser';
 
 import { types } from 'util';
 const parser = (document: string) => {
@@ -19,7 +17,7 @@ const parser = (document: string) => {
 	) as DefaultTreeDocumentFragment;
 
 	// TODO - Build Better Interface
-	const css: DefaultTreeNode[] = [];
+	const css: StyleRootNode = {};
 
 	const client: ClientScriptRootNode = {
 		children: [],
@@ -52,7 +50,7 @@ const parser = (document: string) => {
 						);
 					}
 
-					build.body = convertToAcorn(node);
+					build.children = convertToAcorn(node);
 
 					// Client is either <script></script> or <script context="client"></script>
 					// this code wont be modified, except maybe preprocessing with typescript or babel
@@ -69,7 +67,7 @@ const parser = (document: string) => {
 				return false;
 
 			case 'style':
-				css.push(node);
+				css.children = convertToPostCss(node);
 				return false;
 			default:
 				return true;
@@ -77,11 +75,6 @@ const parser = (document: string) => {
 	});
 
 	// Thoughts -
-
-	// 1. Parser should return Acron parse of <script context="build"></script>, if present
-	// 2. Find AST parser for Styles, should be the same as Svelte if possible
-	// 3. Parser should return "???" parse of <style></style>, if present
-
 	// 5. Loop through Parse5 output and identify conditionals, and other Svelte defines
 	//    a. Should replace '#text' nodes that are conditionals to new types
 	//    b. Identify other '#text' nodes that Svelte defines that we need as well
@@ -101,9 +94,9 @@ const parser = (document: string) => {
 	//     d. What does this look like in Svelte parser? The compiler needs to have this figured out first.
 
 	// console.log('HTML (ast) - ', html);
-	// console.log('CSS (ast) - ', css);
+	console.log('CSS (ast) - ', css.children);
 	// console.log('CLIENT (ast) - ', client.children);
-	console.log('BUILD (ast)- ', build.body);
+	console.log('BUILD (ast)- ', build.children);
 
 	// console.log('HTML (serialized) - ', serialize(wrapInNodeFragment(html)));
 	// console.log('CSS (serialized) - ', serialize(wrapInNodeFragment(css)));
