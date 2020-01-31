@@ -9,6 +9,7 @@ import { parse as BuildScriptParser } from 'acorn';
 import { log } from '../utils';
 import wrapInNodeFragment from './wrapInNodeFragment';
 import { normalizeScript } from './languageAttributes';
+import convertToAcorn from './convertToAcorn';
 import { ClientScriptRootNode, BuildScriptRootNode } from '../types/parser';
 
 import { types } from 'util';
@@ -24,9 +25,7 @@ const parser = (document: string) => {
 		children: [],
 	};
 
-	const build: BuildScriptRootNode = {
-		children: [],
-	};
+	const build: BuildScriptRootNode = {};
 
 	// Split out HTML, Script (build), Script (client), CSS blocks
 	const html: DefaultTreeNode[] = ast.childNodes.filter(node => {
@@ -47,18 +46,13 @@ const parser = (document: string) => {
 				// Build code has to be <script context="build"></script>
 				// this ensure what the intent is, and allows for additional validations
 				if (context === 'build') {
-					if (language)
+					if (language) {
 						log.warning(
 							`The language attribute is disallowed on "build" script tags.`
 						);
-					console.log(
-						'TESTING TESTING TESTING __ ',
-						serialize(wrapInNodeFragment([node])).replace(
-							/(<script(.*)>)|(<\/script>)/gm,
-							''
-						)
-					);
-					build.children.push(node);
+					}
+
+					build.body = convertToAcorn(node);
 
 					// Client is either <script></script> or <script context="client"></script>
 					// this code wont be modified, except maybe preprocessing with typescript or babel
@@ -106,34 +100,30 @@ const parser = (document: string) => {
 	//     c. Are there any props outside of passed in ones that are valid?
 	//     d. What does this look like in Svelte parser? The compiler needs to have this figured out first.
 
-	console.log('HTML (ast) - ', html);
-	console.log('CSS (ast) - ', css);
-	console.log('CLIENT (ast) - ', client.children);
-	console.log('BUILD (ast)- ', build.children);
+	// console.log('HTML (ast) - ', html);
+	// console.log('CSS (ast) - ', css);
+	// console.log('CLIENT (ast) - ', client.children);
+	console.log('BUILD (ast)- ', build.body);
 
-	console.log('HTML (serialized) - ', serialize(wrapInNodeFragment(html)));
-	console.log('CSS (serialized) - ', serialize(wrapInNodeFragment(css)));
-	console.log(
-		'CLIENT (serialized) - ',
-		serialize(wrapInNodeFragment(client.children))
-	);
-	console.log(
-		'BUILD (serialized) - ',
-		serialize(wrapInNodeFragment(build.children))
-	);
+	// console.log('HTML (serialized) - ', serialize(wrapInNodeFragment(html)));
+	// console.log('CSS (serialized) - ', serialize(wrapInNodeFragment(css)));
+	// console.log(
+	// 	'CLIENT (serialized) - ',
+	// 	serialize(wrapInNodeFragment(client.children))
+	// );
 
-	log.stage('Testing Exit Error');
-	log.status('First Stage');
-	log.status('Second Stage', false);
-	log.status('Third Stage');
-	log.info('Logging Info');
-	log.debug('Logging Debug');
-	log.debug({ foo: { bar: 'bar ' }, quaz: ['a', 'b', 'c'] });
-	log.warning('Logging Warning');
-	log.success('Logging Success');
-	log.error('Logging Error without Exit');
-	log.error('This should exit', true);
-	log.info('Should not see this');
+	// log.stage('Testing Exit Error');
+	// log.status('First Stage');
+	// log.status('Second Stage', false);
+	// log.status('Third Stage');
+	// log.info('Logging Info');
+	// log.debug('Logging Debug');
+	// log.debug({ foo: { bar: 'bar ' }, quaz: ['a', 'b', 'c'] });
+	// log.warning('Logging Warning');
+	// log.success('Logging Success');
+	// log.error('Logging Error without Exit');
+	// log.error('This should exit', true);
+	// log.info('Should not see this');
 };
 
 export { parser as default };

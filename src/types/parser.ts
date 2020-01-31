@@ -1,4 +1,5 @@
 import { DefaultTreeNode } from 'parse5';
+import { Node } from 'acorn';
 
 export enum ScriptLanguage {
   Typescript = "typescript",
@@ -12,7 +13,7 @@ export enum StyleLanguage {
 }
 
 export interface BuildScriptRootNode {
-  children: DefaultTreeNode[];
+  body?: Node;
 }
 
 export interface ClientScriptRootNode {
