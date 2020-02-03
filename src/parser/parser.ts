@@ -8,9 +8,8 @@ import { log } from '../utils';
 import { normalizeScript } from './languageAttributes';
 import convertToAcorn from './convertToAcorn';
 import convertToPostCss from './convertToPostCss';
-import { ClientScriptRootNode, BuildScriptRootNode, StyleRootNode } from '../types/parser';
+import { ClientScriptRootNode, BuildScriptRootNode, StyleRootNode } from '../../../src/types/parser';
 
-import { types } from 'util';
 const parser = (document: string) => {
 	const ast = HTMLParser(
 		document.replace(/\r?\n/g, '')

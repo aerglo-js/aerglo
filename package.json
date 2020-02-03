@@ -1,24 +1,55 @@
 {
 	"name": "@aerglo-js/aerglo",
-	"version": "0.0.1",
-	"description": "Static Site generator for the JAM Stack",
-	"main": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"description": "Static Site generator for the JAMstack",
+	"version": "0.0.2",
+	"author": "Zane Milakovic @khrome83",
 	"bin": {
-		"aerglo": "./dist/index.js"
+		"aerglo": "./bin/run"
 	},
-	"directories": {
-		"test": "test"
+	"bugs": "https://github.com/aerglo-js/aerglo/issues",
+	"dependencies": {
+		"@oclif/command": "1.5.19",
+		"@oclif/config": "1.13.3",
+		"@oclif/errors": "1.2.2",
+		"@oclif/plugin-help": "2.2.3",
+		"acorn": "7.1.0",
+		"chalk": "3.0.0",
+		"figures": "3.1.0",
+		"parse5": "5.1.1",
+		"postcss": "7.0.26",
+		"prettyjson": "1.2.1",
+		"tslib": "1.10.0",
+		"uuid": "3.4.0"
 	},
-	"scripts": {
-		"prepare": "tsc",
-		"build": "tsc",
-		"test": "jest --config=jest.config.json --passWithNoTests"
+	"devDependencies": {
+		"@oclif/dev-cli": "1.22.2",
+		"@oclif/test": "1.2.5",
+		"@types/chai": "4.2.8",
+		"@types/mocha": "5.2.7",
+		"@types/node": "13.1.8",
+		"@types/parse5": "5.0.2",
+		"@types/prettyjson": "0.0.29",
+		"@types/uuid": "3.4.7",
+		"chai": "4.2.0",
+		"eslint": "5.16.0",
+		"eslint-config-oclif": "3.1.0",
+		"eslint-config-oclif-typescript": "0.1.0",
+		"globby": "10.0.2",
+		"mocha": "5.2.0",
+		"nyc": "14.1.1",
+		"ts-node": "8.6.2",
+		"typescript": "3.7.5"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/aerglo-js/aerglo.git"
+	"engines": {
+		"node": ">=10.0.0"
 	},
+	"files": [
+		"/bin",
+		"/lib",
+		"/npm-shrinkwrap.json",
+		"/oclif.manifest.json"
+	],
+	"homepage": "https://aerglo.dev",
 	"keywords": [
 		"ssg",
 		"JAM stack",
@@ -34,31 +65,25 @@
 		"functions",
 		"html",
 		"css",
-		"javascript"
+		"javascript",
+		"oclif"
 	],
-	"author": "Zane C. Milakovic <zane.milakovic@icloud.com>",
 	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/aerglo-js/aerglo/issues"
+	"main": "lib/index.js",
+	"oclif": {
+		"commands": "./lib/commands",
+		"bin": "aerglo",
+		"plugins": [
+			"@oclif/plugin-help"
+		]
 	},
-	"homepage": "https://github.com/aerglo-js/aerglo#readme",
-	"devDependencies": {
-		"@types/chalk": "2.2.0",
-		"@types/jest": "24.9.0",
-		"@types/node": "13.1.8",
-		"@types/prettyjson": "0.0.29",
-		"jest": "24.9.0",
-		"ts-jest": "24.3.0",
-		"typescript": "3.7.5"
+	"repository": "aerglo-js/aerglo",
+	"scripts": {
+		"postpack": "rm -f oclif.manifest.json",
+		"posttest": "eslint . --ext .ts --config .eslintrc",
+		"prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+		"test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+		"version": "oclif-dev readme && git add README.md"
 	},
-	"dependencies": {
-		"@types/parse5": "5.0.2",
-		"acorn": "7.1.0",
-		"chalk": "3.0.0",
-		"commander": "4.1.0",
-		"figures": "3.1.0",
-		"parse5": "5.1.1",
-		"postcss": "7.0.26",
-		"prettyjson": "1.2.1"
-	}
+	"types": "lib/index.d.ts"
 }
