@@ -83,7 +83,7 @@ export default class Init extends Command {
 					choices: [
 						{ name: 'Netlify', value: 'netlify' },
 						{ name: 'AWS Amplify', value: 'amplify' },
-						{ name: 'Zeit Now', value: 'now' },
+						{ name: 'Zeit Now', value: 'zeit' },
 					],
 				},
 			]);
