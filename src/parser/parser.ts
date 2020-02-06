@@ -4,11 +4,15 @@ import {
 	DefaultTreeElement,
 	DefaultTreeNode,
 } from 'parse5';
-import { log } from '../utils';
+import log from '../utils/log';
 import { normalizeScript } from './languageAttributes';
 import convertToAcorn from './convertToAcorn';
 import convertToPostCss from './convertToPostCss';
-import { ClientScriptRootNode, BuildScriptRootNode, StyleRootNode } from '../../../src/types/parser';
+import {
+	ClientScriptRootNode,
+	BuildScriptRootNode,
+	StyleRootNode,
+} from '../types/parser';
 
 const parser = (document: string) => {
 	const ast = HTMLParser(
