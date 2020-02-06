@@ -12,15 +12,14 @@ Static Site generator for the JAMstack
 [![License](https://img.shields.io/npm/l/@aerglo-js/aerglo.svg)](https://github.com/aerglo-js/aerglo/blob/master/package.json)
 
 <!-- toc -->
-
-- [Usage](#usage)
-- [Commands](#commands)
-  <!-- tocstop -->
+* [@aerglo-js/aerglo](#aerglo-jsaerglo)
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g @aerglo-js/aerglo
 $ aerglo COMMAND
@@ -32,32 +31,43 @@ USAGE
   $ aerglo COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
+* [`aerglo build [PATH] [TARGET]`](#aerglo-build-path-target)
+* [`aerglo dev [FILE]`](#aerglo-dev-file)
+* [`aerglo hello [FILE]`](#aerglo-hello-file)
+* [`aerglo help [COMMAND]`](#aerglo-help-command)
+* [`aerglo init [REPO]`](#aerglo-init-repo)
+* [`aerglo validate [FILE]`](#aerglo-validate-file)
 
-- [`aerglo build [FILE]`](#aerglo-build-file)
-- [`aerglo dev [FILE]`](#aerglo-dev-file)
-- [`aerglo hello [FILE]`](#aerglo-hello-file)
-- [`aerglo help [COMMAND]`](#aerglo-help-command)
-- [`aerglo init [FILE]`](#aerglo-init-file)
-- [`aerglo validate [FILE]`](#aerglo-validate-file)
+## `aerglo build [PATH] [TARGET]`
 
-## `aerglo build [FILE]`
-
-describe the command here
+Build the site at [PATH] for a production deploy to the [TARGET] specified
 
 ```
 USAGE
-  $ aerglo build [FILE]
+  $ aerglo build [PATH] [TARGET]
+
+ARGUMENTS
+  PATH    [default: .] Path to root of site to build
+  TARGET  (netlify|now) [default: netlify] your service deploy target
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help             show CLI help
+  -p, --page=page        incremental build of only specified pages within site root (./pages/<PAGE>)
+  -q, --partial=partial  incremental build of only specified partials within site root (./partials/<PARTIAL>)
+  -v, --verbose          noisy output with all details
+  --ci                   removes all progress indicators between stages
+
+EXAMPLES
+  $ aerglo build
+  $ aerglo build /path/to/site/root
+  $ aerglo build . now
+  $ aerglo build -p="contact.html"
+  $ aerglo build -q="contact-list.html"
 ```
 
 _See code: [src/commands/build.ts](https://github.com/aerglo-js/aerglo/blob/v0.0.2/src/commands/build.ts)_
@@ -115,18 +125,26 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
 
-## `aerglo init [FILE]`
+## `aerglo init [REPO]`
 
-describe the command here
+Initialize a new Aerglo project by answering a few questions
 
 ```
 USAGE
-  $ aerglo init [FILE]
+  $ aerglo init [REPO]
+
+ARGUMENTS
+  REPO  [default: aerglo-js/base] Specify an alternate GitHub template repo to initialize Aerglo
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -f, --force    use defaults for all prompts
+  -h, --help     show CLI help
+  -v, --verbose  noisy output with all details
+
+EXAMPLES
+  $ aerglo init
+  $ aerglo init -f
+  $ aerglo init <USER>/<REPO>
 ```
 
 _See code: [src/commands/init.ts](https://github.com/aerglo-js/aerglo/blob/v0.0.2/src/commands/init.ts)_
@@ -146,5 +164,4 @@ OPTIONS
 ```
 
 _See code: [src/commands/validate.ts](https://github.com/aerglo-js/aerglo/blob/v0.0.2/src/commands/validate.ts)_
-
 <!-- commandsstop -->

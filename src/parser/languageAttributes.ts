@@ -1,4 +1,4 @@
-import { log } from '../utils';
+import log from '../utils/log';
 import { ScriptLanguage, StyleLanguage } from '../types/parser';
 
 // Normalizes the logic for the language attribute, to ensure valid value
