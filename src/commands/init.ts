@@ -37,7 +37,7 @@ export default class Init extends Command {
 		{
 			name: 'repo',
 			description:
-				'Specify an alternate GitHub template repo to initalize Aerglo',
+				'Specify an alternate GitHub template repo to initialize Aerglo',
 			required: false,
 			default: 'aerglo-js/base',
 		},
@@ -71,13 +71,13 @@ export default class Init extends Command {
 				},
 				{
 					name: 'domain',
-					message: 'What domain will users go to vist your site?',
+					message: 'What domain will users go to visit your site?',
 					default: defaults.domain,
 					type: 'input',
 				},
 				{
 					name: 'target',
-					message: 'Which enviroment will you be deploying too?',
+					message: 'Which environment will you be deploying too?',
 					type: 'list',
 					default: defaults.target,
 					choices: [
