@@ -10,6 +10,6 @@
 		"target": "es2017",
 		"forceConsistentCasingInFileNames": true
 	},
-	"include": ["src/**/*"],
+	"include": ["src/**/*", "degit.d.ts"],
 	"exclude": ["node_modules", "dist", "test", "lib"]
 }

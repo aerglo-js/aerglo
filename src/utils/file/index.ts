@@ -1,5 +1,5 @@
 import open from './open';
+import template from './template';
+import write from './write';
 
-const file = { open };
-
-export { file as default, open };
+export { open, template, write };
