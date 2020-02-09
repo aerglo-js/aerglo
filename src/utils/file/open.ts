@@ -9,7 +9,7 @@ export default (path: string): string | void => {
 		if (err.code === 'ENOENT') {
 			log.error(`Unable to find file '${path}'.`, true);
 		} else {
-			log.error(err), true;
+			log.error(err, true);
 		}
 	}
 };
