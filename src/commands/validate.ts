@@ -1,25 +1,29 @@
-import {Command, flags} from '@oclif/command'
+import { Command, flags } from '@oclif/command';
+import validate from '../validate';
 
 export default class Validate extends Command {
-  static description = 'describe the command here'
+	static description =
+		'Processes a Aerglo projects repo to ensure it is structured correctly, and all settings are valid.';
 
-  static flags = {
-    help: flags.help({char: 'h'}),
-    // flag with a value (-n, --name=VALUE)
-    name: flags.string({char: 'n', description: 'name to print'}),
-    // flag with no value (-f, --force)
-    force: flags.boolean({char: 'f'}),
-  }
+	async run() {
+		// const { args, flags } = this.parse(Validate);
 
-  static args = [{name: 'file'}]
+		const output = validate();
 
-  async run() {
-    const {args, flags} = this.parse(Validate)
+		if (!Array.isArray(output)) {
+			if (!output.valid) {
+				this.error(`Error: ${output.message}`);
+			} else {
+				this.log(`Everything looks good with 'aerglo.yml'`);
+			}
+		} else {
+			output.forEach(({ message }) => {
+				this.log(`Error: ${message}`);
+			});
 
-    const name = flags.name || 'world'
-    this.log(`hello ${name} from /Users/zane/GitHub/aerglo/oclif/aerglo/src/commands/validate.ts`)
-    if (args.file && flags.force) {
-      this.log(`you input --force and --file: ${args.file}`)
-    }
-  }
+			this.error(
+				`Validation found ${output.length} errors within file 'aerglo.yml'`
+			);
+		}
+	}
 }
