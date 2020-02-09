@@ -49,7 +49,7 @@ export default class Init extends Command {
 		const defaults = {
 			name: 'new-website',
 			description: '',
-			domain: 'www.new-website.com',
+			domain: 'new-website.com',
 			target: 'netlify',
 		} as InitResponse;
 
