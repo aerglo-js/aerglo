@@ -1,5 +1,7 @@
 import { Command, flags } from '@oclif/command';
+import Listr from 'listr';
 import validate from '../validate';
+import { write } from '../utils';
 
 export default class Validate extends Command {
 	static description =
@@ -7,6 +9,25 @@ export default class Validate extends Command {
 
 	async run() {
 		// const { args, flags } = this.parse(Validate);
+
+		const tasks = new Listr([
+			{
+				title: `Validating configuration file`,
+				task: (ctx, task) => {
+					if (false) {
+						task.skip(`No 'aerglo.yml' found, using default configuration.`);
+					}
+				},
+			},
+			{
+				title: `Validating folder paths`,
+				task: () => {},
+			},
+			{
+				title: `Validating file paths`,
+				task: () => {},
+			},
+		]);
 
 		const output = validate();
 
