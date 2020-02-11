@@ -22,13 +22,13 @@ const defaults = {
 		required: true,
 		default: 'new-website',
 		validation: '^[\\w\\-]{4,32}$',
-		errorMessage: `'name' should be alpha numberic, or dashes. It should be 4-32 characters in length. `,
+		errorMessage: `'name' should be alpha numeric, or dashes. It should be 4-32 characters in length. `,
 	},
 	description: {
 		required: false,
 		default: 'new-website',
 		validation: '^.{0,128}$',
-		errorMessage: `'description' should be alpha numberic with dashes, and a max of 128 characters.`,
+		errorMessage: `'description' should be alpha numeric with dashes, and a max of 128 characters.`,
 	},
 	domain: {
 		required: true,
@@ -111,7 +111,7 @@ const defaults = {
 			required: true,
 			default: '/partials-',
 			validation: '^[\\w\\-]{1,12}$',
-			errorMessage: `'partials.prefix' should be alpha numberic, or dashes. It should be 1-12 characters in length. `,
+			errorMessage: `'partials.prefix' should be alpha numeric, or dashes. It should be 1-12 characters in length. `,
 		},
 	},
 } as DefaultSettings;
