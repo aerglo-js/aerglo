@@ -1,6 +1,3 @@
-import { safeLoad } from 'js-yaml';
-import { open } from '../utils/file';
-
 interface ValidationOutput {
 	valid: boolean;
 	message?: string;
@@ -184,15 +181,6 @@ const process = (
 	return errors.length ? errors : { valid: true };
 };
 
-export default (
-	path: string = 'aerglo.yml'
-): ValidationOutput | ValidationOutput[] => {
-	const file = open(path);
-	if (!file) {
-		return { valid: false, message: "Problem opening 'aerglo.yml` file." };
-	}
-
-	// Parse YAML and Validate (replacing tabs with double spaces to avoid common indent error)
-	const data = safeLoad(file.replace(/\t/gi, ' '));
+export default (data: object): ValidationOutput | ValidationOutput[] => {
 	return process(data);
 };

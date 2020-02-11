@@ -145,7 +145,7 @@ export default class Init extends Command {
 		tasks.run().catch(err => {
 			write('aerglo.log', `${err}`);
 			this.error(
-				"\nOhh no, something went wrong! We wrote the error out to 'aerglo.log'."
+				"\nOhh no, something went wrong! We wrote the errors out to 'aerglo.log'."
 			);
 		});
 	}
